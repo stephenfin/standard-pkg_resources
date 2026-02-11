@@ -1,0 +1,80 @@
+[build-system]
+requires = ["setuptools>=77", "setuptools_scm[toml]>=3.4.1"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "standard-pkg_resources"
+authors = [
+    { name = "Python Packaging Authority", email = "distutils-sig@python.org" },
+]
+description = "Redistribution of the pkg_resources library provided by setuptools"
+readme = "README.rst"
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: System :: Archiving :: Packaging",
+    "Topic :: System :: Systems Administration",
+    "Topic :: Utilities",
+]
+requires-python = ">=3.9"
+license = "MIT"
+dependencies = [
+    "packaging>=24.2",
+    "jaraco.text>=3.7",
+    "platformdirs >= 4.2.2",
+    "importlib_metadata>=6; python_version < '3.10'",
+]
+keywords = ["CPAN PyPI distutils eggs package management"]
+dynamic = ["version"]
+
+[project.urls]
+Source = "https://github.com/pypa/setuptools"
+Documentation = "https://setuptools.pypa.io/"
+Changelog = "https://setuptools.pypa.io/en/stable/history.html"
+
+[project.optional-dependencies]
+test = [
+    # upstream
+    "pytest >= 6, != 8.1.*",
+
+    # local
+    "jaraco.envs>=2.2",
+    "pytest-xdist>=3", # Dropped dependency on pytest-fork and py
+    "jaraco.path>=3.7.2", # Typing fixes
+    "build[virtualenv]>=1.0.3",
+    "pytest-timeout",
+    'pytest-perf; sys_platform != "cygwin"', # workaround for jaraco/inflect#195, pydantic/pydantic-core#773 (see #3986)
+    "pytest-home >= 0.5",
+    "pytest-subprocess",
+
+    "jaraco.test>=5.5", # py.typed
+]
+
+cover = [
+    "pytest-cov",
+]
+
+[tool.setuptools]
+include-package-data = true
+
+[tool.setuptools.packages.find]
+include = [
+    "pkg_resources*",
+]
+exclude = [
+    "*.tests",
+    "*.tests.*",
+]
+namespaces = true
+
+[tool.setuptools.exclude-package-data]
+# Remove ruff.toml when installing vendored packages (#4652)
+"*" = ["ruff.toml"]
+
+[tool.distutils.sdist]
+formats = "zip"
+
+[tool.setuptools_scm]
